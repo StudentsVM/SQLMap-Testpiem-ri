@@ -6,3 +6,5 @@ Tajos .txt failos ir vēl atrodamas dažas neskaidras piezīmes, kā piemēram: 
 Tās piezīmes tiks izskaidrotas līdz 20. jan. plkst 23:59 pārsktāmākā lāsītājam formā. Ceru, ka būsiet pacietīgi!
 
 P. S. Izrādās, ka man konts ir "flagged" un tādēļ paslēpts no publikas. Esmu nosūtījis atjaunošanas pieprasījumu uz support.github.com. Ja redzat šo "P. S.", tad tas ir iemesls, kāpēc vēl nav augšupielādētas jaunās piezīmes. Centīšos tās izlabot, ko līdz konts atkal būs publisks. To vēl neesmu izdarījis, jo man nāktos mainīt saturu, kas varētu traucēt github darbiniekiem izpētīt šo problēmu.
+
+P. S. Paslaik dzesu vecos neizskaidrotos failus, tapec, ja skataties uz tiem saja bridi, tad tie bus aizvietoti ar jaunajiem pec 10 minutem.
